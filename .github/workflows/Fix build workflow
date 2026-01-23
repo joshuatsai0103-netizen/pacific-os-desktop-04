@@ -1,0 +1,30 @@
+name: Build Windows Installer
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          npm install electron --save-dev
+          npm install electron-builder --save-dev
+
+      - name: Build installer
+        run: npx electron-builder --win --x64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PACIFIC_OS_Installer
+          path: dist/*
